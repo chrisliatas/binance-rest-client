@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "binancerestclient"
+name = "binanceRestClient"
 version = "0.1.0"
 description = "A Binance REST API client."
 authors = ["Chris Liatas <chris@liatas.com>"]

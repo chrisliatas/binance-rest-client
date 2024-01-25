@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from enums import Exchange
+from binanceRestClient.enums import Exchange
 
 
 @dataclass
