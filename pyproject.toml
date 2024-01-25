@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "binancerestclient"
+version = "0.1.0"
+description = "A Binance REST API client."
+authors = ["Chris Liatas <chris@liatas.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+colorama = "^0.4.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
