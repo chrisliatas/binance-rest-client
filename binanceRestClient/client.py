@@ -1,9 +1,9 @@
 import hashlib
 import hmac
 import logging
+import platform
 from datetime import datetime
 from operator import itemgetter
-import platform
 from time import time
 
 import colorama
@@ -16,16 +16,18 @@ from binanceRestClient.exceptions import (
 )
 from binanceRestClient.settings import EXCHANGE_SETTINGS, Exchange
 
-
 lgr = logging.getLogger(__name__)
 
 __app_name__: str = "cl-binance-rest-api"
 __version__: str = "0.1.0"
 
+
 def get_user_agent(name: str, version: str) -> str:
     return f"{name}_{version}-python_{str(platform.python_version())}"
 
+
 user_agent = get_user_agent(__app_name__, __version__)
+
 
 def currentTsMillis() -> int:
     return int(round(time() * 1000))
@@ -289,6 +291,10 @@ class BinanceRestClient:
     def get_all_tickers(self) -> dict:
         """Latest price for all symbols."""
         return self._get("ticker/price")
+
+    def get_24hr_ticker(self, **params) -> dict:
+        """24 hour price change statistics."""
+        return self._get("ticker/24hr", data=params)
 
     def get_orderbook_tickers(self) -> dict:
         """Best price/qty on the order book for all symbols."""
