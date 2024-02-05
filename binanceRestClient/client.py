@@ -41,7 +41,7 @@ class BinanceRestClient:
         api_key: str | None = None,
         api_secret: str | None = None,
         requests_params: dict | None = None,
-        exchange: str | None = None,
+        exchange: str | None = Exchange.BINANCE,
         enable_colorama: bool = True,
         debug: bool = False,
     ) -> None:
