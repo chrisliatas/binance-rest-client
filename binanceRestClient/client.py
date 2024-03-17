@@ -5,8 +5,8 @@ import platform
 from datetime import datetime
 from operator import itemgetter
 from time import time
+from typing import Any
 
-import colorama
 import requests
 
 from binanceRestClient.exceptions import (
@@ -42,20 +42,12 @@ class BinanceRestClient:
         api_secret: str | None = None,
         requests_params: dict | None = None,
         exchange: str | None = Exchange.BINANCE,
-        enable_colorama: bool = True,
         debug: bool = False,
     ) -> None:
         """Binance REST API Client constructor"""
         self.sigterm = False
         self.session = None
         if self.sigterm is False:
-            if enable_colorama:
-                clrV = getattr(colorama, "__version__", None)
-                lgr.info(
-                    f"{self.cls_name}.__init__ - Initiating `colorama_"
-                    f"{clrV if clrV else 'version'}`"
-                )
-                colorama.init()
             if exchange not in Exchange:
                 lgr.critical(
                     f"{self.cls_name}.__init__ - Exchange {exchange} is not "
@@ -108,18 +100,16 @@ class BinanceRestClient:
         )
         return session
 
-    def _create_api_uri(self, path, signed=True, version=API_VERSION):
+    def _create_api_uri(self, path: str, signed=True, version=API_VERSION) -> str:
         # v = self.PRIVATE_API_VERSION if signed else version
         return self.api_url + "/" + version + "/" + path
 
     @staticmethod
-    def _order_params(data):
+    def _order_params(data: dict[str, Any]) -> list[tuple[str, str]]:
         """
         Convert params to list with signature as last element
-
-        :param data:
-        :return:
-
+        Args:
+            data (dict): The request parameters.
         """
         has_signature = False
         params = []
@@ -134,7 +124,10 @@ class BinanceRestClient:
             params.append(("signature", data["signature"]))
         return params
 
-    def _generate_signature(self, data):
+    def _generate_signature(self, data: dict[str, Any]) -> str:
+        """Generate request signature."""
+        if not self.api_secret:
+            raise BinanceAPIException("Api secret not configured")
         order_data = self._order_params(data)
         query_string = "&".join(["{}={}".format(d[0], d[1]) for d in order_data])
         m = hmac.new(
@@ -160,7 +153,13 @@ class BinanceRestClient:
             raise BinanceRequestException("Invalid Response: %s" % self.response.text)
 
     def _request(
-        self, method, uri, signed, force_params=False, throw_exception=True, **kwargs
+        self,
+        method: str,
+        uri: str,
+        signed: bool,
+        force_params=False,
+        throw_exception=True,
+        **kwargs,
     ) -> dict:
         if self.sigterm is True:
             info = (
@@ -233,8 +232,8 @@ class BinanceRestClient:
 
     def _request_api(
         self,
-        method,
-        path,
+        method: str,
+        path: str,
         signed=False,
         version=API_VERSION,
         throw_exception=True,
