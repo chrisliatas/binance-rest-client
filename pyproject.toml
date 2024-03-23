@@ -4,11 +4,14 @@ version = "0.1.0"
 description = "A Binance REST API client."
 authors = ["Chris Liatas <chris@liatas.com>"]
 readme = "README.md"
+packages = [
+    { include = "binanceRestClient" },
+    { include = "binanceRestClient/**/*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "^2.31.0"
-colorama = "^0.4.6"
 
 
 [build-system]
