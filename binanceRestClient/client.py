@@ -245,7 +245,7 @@ class BinanceRestClient:
             method, uri, signed, throw_exception=throw_exception, **kwargs
         )
 
-    def _get(self, path, signed=False, version=API_VERSION, **kwargs) -> dict:
+    def _get(self, path, signed=False, version=API_VERSION, **kwargs) -> dict | list:
         return self._request_api("get", path, signed, version, **kwargs)
 
     def _post(
@@ -275,19 +275,29 @@ class BinanceRestClient:
 
         return None
 
-    def ping(self) -> dict:
-        """Test connectivity to the Rest API. Returns empty array {}"""
-        return self._get("ping")
+    def ping(self) -> bool:
+        """Test connectivity to the Rest API. Returns empty dictionary {}"""
+        res = self._get("ping")
+        if res == {}:
+            return True
+        return False
 
-    def get_server_time(self) -> dict:
+    def get_server_time(self) -> int:
         """Returns the current server time
         {
             "serverTime": 1499827319559
         }
         """
-        return self._get("time")
+        res = self._get("time")
+        if "serverTime" in res:
+            return res["serverTime"]
+        return 0
 
-    def get_all_tickers(self) -> dict:
+    def get_ticker(self, **params) -> dict | list:
+        """Latest price for a symbol or symbols."""
+        return self._get("ticker/price", data=params)
+
+    def get_all_tickers(self) -> list[dict]:
         """Latest price for all symbols."""
         return self._get("ticker/price")
 
@@ -335,7 +345,7 @@ class BinanceRestClient:
         """
         return self._get("historicalTrades", data=params)
 
-    def get_klines(self, **params) -> dict:
+    def get_klines(self, **params) -> list[list[str]]:
         """Kline/candlestick bars for a symbol. Klines are uniquely identified by their
         open time. required params symbol, interval
         {
