@@ -309,6 +309,10 @@ class BinanceRestClient:
         """Best price/qty on the order book for all symbols."""
         return self._get("ticker/bookTicker")
 
+    def get_rol_w_price(self, **params) -> dict:
+        """Rolling window price change statistics"""
+        return self._get("ticker", data=params)
+
     def get_order_book(self, **params) -> dict:
         """Get the Order Book for the market
         {
