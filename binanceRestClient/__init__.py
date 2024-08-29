@@ -1,3 +1,4 @@
+from .async_tools import BinanceKlinesFetcher
 from .client import BinanceRestClient
 from .enums import Exchange
 from .exceptions import (
