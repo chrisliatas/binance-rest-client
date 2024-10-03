@@ -17,6 +17,7 @@ class BaseStrEnum(str, Enum, metaclass=MetaEnum):
 class Exchange(BaseStrEnum):
     BINANCE = "binance.com"
     BINANCE_TESTNET = "binance.com-testnet"
+    BINANCE_WALLET = "binance.com-wallet"
     BINANCE_MARGIN = "binance.com-margin"
     BINANCE_MARGIN_TESTNET = "binance.com-margin-testnet"
     BINANCE_ISOLATED_MARGIN = "binance.com-isolated_margin"

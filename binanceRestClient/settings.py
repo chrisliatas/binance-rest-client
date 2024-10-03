@@ -27,6 +27,13 @@ EXCHANGE_SETTINGS = {
         "wss://testnet.binance.vision/ws-api/v3",
         "CEX",
     ),
+    Exchange.BINANCE_WALLET: ExchangeSettings(
+        0,
+        "https://api.binance.com/sapi",
+        "",
+        "",
+        "CEX",
+    ),
     Exchange.BINANCE_MARGIN: ExchangeSettings(
         1024, "https://api.binance.com/api", "wss://stream.binance.com:9443/", "", "CEX"
     ),

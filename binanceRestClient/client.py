@@ -35,6 +35,7 @@ def currentTsMillis() -> int:
 
 class BinanceRestClient:
     API_VERSION = "v3"
+    WALLET_API_VERSION = "v1"
 
     def __init__(
         self,
@@ -102,6 +103,9 @@ class BinanceRestClient:
 
     def _create_api_uri(self, path: str, signed=True, version=API_VERSION) -> str:
         # v = self.PRIVATE_API_VERSION if signed else version
+        return self.api_url + "/" + version + "/" + path
+
+    def _create_wallet_api_uri(self, path: str, version=WALLET_API_VERSION) -> str:
         return self.api_url + "/" + version + "/" + path
 
     @staticmethod
@@ -240,6 +244,21 @@ class BinanceRestClient:
         **kwargs,
     ) -> dict:
         uri = self._create_api_uri(path, signed, version)
+
+        return self._request(
+            method, uri, signed, throw_exception=throw_exception, **kwargs
+        )
+
+    def _request_wallet_api(
+        self,
+        method: str,
+        path: str,
+        signed=True,
+        version=WALLET_API_VERSION,
+        throw_exception=True,
+        **kwargs,
+    ) -> list[dict] | dict:
+        uri = self._create_wallet_api_uri(path, version)
 
         return self._request(
             method, uri, signed, throw_exception=throw_exception, **kwargs
@@ -476,7 +495,6 @@ class BinanceRestClient:
             self.session.close()
         return True
 
-    def all_coins_info(self) -> dict:
+    def all_coins_info(self) -> list[dict] | dict:
         """Get all coins information. This is a `wallet` endpoint."""
-        uri = self.api_url + "/sapi/v1/capital/config/getall"
-        return self._request("get", uri, signed=True, throw_exception=True, data={})
+        return self._request_wallet_api("get", "capital/config/getall", data={})
