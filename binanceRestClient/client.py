@@ -475,3 +475,8 @@ class BinanceRestClient:
         if self.session:
             self.session.close()
         return True
+
+    def all_coins_info(self) -> dict:
+        """Get all coins information. This is a `wallet` endpoint."""
+        uri = self.api_url + "/sapi/v1/capital/config/getall"
+        return self._request("get", uri, signed=True, throw_exception=True, data={})
